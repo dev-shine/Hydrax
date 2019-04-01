@@ -5,9 +5,9 @@ const compress = require('compression');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const helmet = require('helmet');
-// const routes = require('../api/routes/v1');
+const routes = require('../api/routes');
 const { logs } = require('./vars');
-// const error = require('../api/middlewares/error');
+const error = require('../api/middlewares/error');
 
 /**
 * Express instance
@@ -36,15 +36,15 @@ app.use(helmet());
 app.use(cors());
 
 // mount api v1 routes
-// app.use('/v1', routes);
+app.use(routes);
 
-// // if error is not an instanceOf APIError, convert it.
-// app.use(converter);
+// if error is not an instanceOf APIError, convert it.
+app.use(error.converter);
 
-// // catch 404 and forward to error handler
-// app.use(notFound);
+// catch 404 and forward to error handler
+app.use(error.notFound);
 
-// // error handler, send stacktrace only during development
-// app.use(handler);
+// error handler, send stacktrace only during development
+app.use(error.handler);
 
 module.exports = app;
