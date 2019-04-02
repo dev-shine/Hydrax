@@ -1,6 +1,7 @@
 {
     "rules": {
         "linebreak-style": "off",
+        "arrow-body-style": "off",
         "no-console": 0,
         "no-underscore-dangle": 0,
         "no-unused-vars": [

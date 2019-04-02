@@ -1,13 +1,10 @@
 const express = require('express');
-const eohdClient = require('../../parser/clients/eodhd');
+const controller = require('../controllers/sample.controller');
 
 const router = express.Router();
 
 router.get('/status', (req, res) => res.send('OK'));
 
-router.get('/test', async (req, res) => {
-  const result = await eohdClient.test();
-  res.send(result.data);
-});
+router.get('/test', controller.test);
 
 module.exports = router;
