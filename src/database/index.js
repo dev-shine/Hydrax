@@ -2,6 +2,7 @@ const {
   pgHost, pgDatabase, pgUser, pgPassword,
 } = require('../config/vars');
 const pgp = require('pg-promise')();
+const symbolCodesManager = require('./managers/symbolcodes');
 
 const cn = {
   host: pgHost,
@@ -14,12 +15,6 @@ const db = pgp(cn);
 
 exports.db = db;
 
-exports.queries = {
-  symbolCodes: {
-    getSymbolCodes: () => db.any('select * from symbol_codes'),
-    addSymbolCode: (symbol, type, exchange, service) => {
-      return db.none('insert into symbol_codes(symbol, type, exchange, service, created_at, updated_at) ' +
-        'values($1, $2, $3, $4, $5, $5)', [symbol, type, exchange, service, new Date()]);
-    },
-  },
+exports.managers = {
+  symbolCodes: symbolCodesManager(db),
 };
