@@ -1,12 +1,9 @@
-const eohdClient = require('../../parser/clients/eodhd');
-const database = require('../../database');
+const eohHandler = require('../../parser/handlers/eod');
 
 exports.test = async (req, res, next) => {
   try {
-    // const result = await eohdClient.test();
-    // res.send(result.data);
-    const result = await database.managers.symbolCodes.get.symbolCodes();
-    res.send(result);
+    // await eohHandler.exchangeSymbols(req.query.exchange, req.query.type);
+    res.send('OK');
   } catch (error) {
     next(error);
   }
