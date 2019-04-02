@@ -1,18 +1,24 @@
 const logger = require('../../config/logger');
 
-function manager(db) {
+const pgp = require('pg-promise')({
+  capSQL: true,
+});
+
+const cs = new pgp.helpers.ColumnSet(['symbol', 'type', 'exchange', 'service', 'created_at', 'updated_at'], { table: 'symbol_codes' });
+
+module.exports = (db) => {
   return {
-    get: {
-      symbolCodes: () => db.any('select * from symbol_codes'),
-    },
-    insert: {
-      symbolCode: (symbol, type, exchange, service) => {
-        logger.info('insert symbolCode');
-        return db.none('insert into symbol_codes(symbol, type, exchange, service, created_at, updated_at) ' +
-          'values($1, $2, $3, $4, $5, $5)', [symbol, type, exchange, service, new Date()]);
-      },
+    getAll: () => db.any('select * from symbol_codes'),
+    insert: (values) => {
+      const now = new Date();
+      values.forEach((x) => {
+        x.created_at = now;
+        x.updated_at = now;
+      });
+
+      logger.info('insert symbolCode');
+      const query = pgp.helpers.insert(values, cs);
+      return db.none(query);
     },
   };
-}
-
-module.exports = manager;
+};

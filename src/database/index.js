@@ -1,7 +1,9 @@
 const {
   pgHost, pgDatabase, pgUser, pgPassword,
 } = require('../config/vars');
-const pgp = require('pg-promise')();
+const pgp = require('pg-promise')({
+  capSQL: true,
+});
 const symbolCodesManager = require('./managers/symbolcodes');
 
 const cn = {
@@ -13,8 +15,6 @@ const cn = {
 
 const db = pgp(cn);
 
-exports.db = db;
-
-exports.managers = {
+module.exports = {
   symbolCodes: symbolCodesManager(db),
 };

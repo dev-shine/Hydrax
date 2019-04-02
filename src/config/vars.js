@@ -10,7 +10,7 @@ module.exports = {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
   logs: process.env.NODE_ENV === 'production' ? 'combined' : 'dev',
-  eodhdToken: process.env.EODHD_TOKEN,
+  eodToken: process.env.EODHD_TOKEN,
   pgHost: process.env.PG_HOST,
   pgDatabase: process.env.PG_DATABASE,
   pgUser: process.env.PG_USER,
