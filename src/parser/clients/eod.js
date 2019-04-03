@@ -9,5 +9,10 @@ const client = axios.create({
 axiosRetry(client, { retry: 3 });
 
 module.exports = {
-  getExchangeSymbols: exchange => client.get(`exchanges/${exchange}?api_token=${eodToken}&fmt=json`),
+  getExchangeSymbols: exchange => client.get(`exchanges/${exchange}`, {
+    params: {
+      api_token: eodToken,
+      fmt: 'json',
+    },
+  }),
 };

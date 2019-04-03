@@ -4,14 +4,18 @@ const pgp = require('pg-promise')({
   capSQL: true,
 });
 
-const cs = new pgp.helpers.ColumnSet(['symbol', 'type', 'exchange', 'service', 'created_at', 'updated_at'], { table: 'symbol_codes' });
+const tableName = 'symbol_codes';
+const cs = new pgp.helpers.ColumnSet(['symbol', 'type', 'exchange', 'service', 'created_at', 'updated_at'], { table: tableName });
 
 module.exports = (db) => {
   return {
-    getAll: () => db.any('select * from symbol_codes'),
-    insert: (values) => {
+    getAll: () => db.any(`select * from ${tableName}`),
+    insert: (values, type, service) => {
       const now = new Date();
       values.forEach((x) => {
+        x.type = type;
+        x.exchange = x.exchange.toUpperCase();
+        x.service = service;
         x.created_at = now;
         x.updated_at = now;
       });

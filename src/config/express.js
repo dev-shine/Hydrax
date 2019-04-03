@@ -35,7 +35,7 @@ app.use(helmet());
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
 
-// mount api v1 routes
+// mount api routes
 app.use(routes);
 
 // if error is not an instanceOf APIError, convert it.

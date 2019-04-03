@@ -4,7 +4,7 @@ const {
 const pgp = require('pg-promise')({
   capSQL: true,
 });
-const symbolCodesManager = require('./managers/symbolcodes');
+const symbolsManager = require('./managers/symbols');
 
 const cn = {
   host: pgHost,
@@ -16,5 +16,5 @@ const cn = {
 const db = pgp(cn);
 
 module.exports = {
-  symbolCodes: symbolCodesManager(db),
+  symbols: symbolsManager(db),
 };

@@ -1,7 +1,7 @@
 const joi = require('joi');
 
 module.exports = {
-  sampleTest: {
+  populate: {
     query: {
       exchange: joi.string().required(),
       type: joi.string().required(),
