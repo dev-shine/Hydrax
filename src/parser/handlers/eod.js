@@ -9,10 +9,8 @@ exports.exchangeSymbols = async (exchange, type) => {
   const mappedSymbols = map(symbolsResponse.data, (x) => {
     return {
       symbol: x.Code.replace('-', '/'),
-      type,
       exchange: x.Exchange,
-      service: serviceName,
     };
   });
-  await dbManager.symbolCodes.insert(mappedSymbols);
+  await dbManager.symbols.insert(mappedSymbols, type, serviceName);
 };
