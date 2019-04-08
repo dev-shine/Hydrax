@@ -9,8 +9,12 @@ const scheduledJobs = [
     const prevDate = new Date();
     prevDate.setDate(prevDate.getDate() - 1);
     prevDate.setHours(0, 0, 0, 0);
-
     await eodHandlers.dailyOhlcvs('CC', prevDate);
+  }),
+
+  cron.schedule('10 * * * * *', async () => {
+    console.log('get live data every minute at 10 second');
+    await eodHandlers.liveStockPrices('CC');
   }),
 ];
 

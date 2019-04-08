@@ -12,11 +12,10 @@ const cs = new pgp.helpers.ColumnSet([
 module.exports = (db) => {
   return {
     getAll: () => db.any(`select * from ${tableName}`),
-    insert: (values, period, startDate) => {
+    insert: (values, period) => {
       const now = new Date();
       values.forEach((x) => {
         x.period = period;
-        x.timestamp = startDate;
         x.created_at = now;
         x.updated_at = now;
       });
