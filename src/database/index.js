@@ -9,6 +9,7 @@ const ohlcvsManager = require('./managers/ohlcvs');
 
 const cn = {
   host: pgHost,
+  port: 5432,
   database: pgDatabase,
   user: pgUser,
   password: pgPassword,

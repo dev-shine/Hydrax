@@ -13,6 +13,7 @@ const scheduledJobs = [
   }),
 
   cron.schedule('10 * * * * *', async () => {
+    
     console.log('get live data every minute at 10 second');
     await eodHandlers.liveStockPrices('CC');
   }),

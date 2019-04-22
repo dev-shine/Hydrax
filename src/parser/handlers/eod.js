@@ -94,7 +94,7 @@ module.exports = {
       } else {
         handleItem(response.data);
       }
-
+      console.log('--------- length of mapResponse', mappedResponse)
       if (mappedResponse.length > 0) {
         await dbManager.ohlcvs.insert(mappedResponse, '1m');
       } else {
