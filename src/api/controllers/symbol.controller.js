@@ -1,9 +1,9 @@
-const eohHandler = require('../../parser/handlers/eod');
+const eodHandler = require('../../parser/handlers/eod');
 const database = require('../../database');
 
 exports.populate = async (req, res, next) => {
   try {
-    await eohHandler.exchangeSymbols(req.query.exchange, req.query.type);
+    await eodHandler.exchangeSymbols(req.query.exchange, req.query.type);
     res.send('OK');
   } catch (error) {
     next(error);
