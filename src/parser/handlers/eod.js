@@ -23,7 +23,11 @@ module.exports = {
         exchange: x.Exchange,
       };
     });
-    await dbManager.symbols.insert(mappedSymbols, type, serviceName);
+    const currentSymbols = await dbManager.symbols.getAllSymbols()
+    const filteredSymbols = currentSymbols.map(x => x.symbol)
+    const filteredMappedSymbols = mappedSymbols.filter(x => filteredSymbols.indexOf(x.symbol) < 0)
+    
+    await dbManager.symbols.insert(filteredMappedSymbols, type, serviceName);
   },
 
   dailyOhlcvs: async (exchange, date) => {
