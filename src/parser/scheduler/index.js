@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 
 const eodHandlers = require('../handlers/eod');
+const setup = require('../setup');
 
 const scheduledJobs = [
   cron.schedule('30 0 * * *', async () => {
@@ -12,10 +13,16 @@ const scheduledJobs = [
     await eodHandlers.dailyOhlcvs('CC', prevDate);
   }),
 
-  cron.schedule('10 * * * * *', async () => {
+  cron.schedule('50 * * * * *', async () => {
     
-    console.log('get live data every minute at 10 second');
+    console.log('get live data every minute at 50 second');
     await eodHandlers.liveStockPrices('CC');
+  }),
+
+  cron.schedule('0 12 * * *', async () => {
+    console.log('populate symbol_codes db at 12:00 every day');
+
+    setup.populateSymbol()
   }),
 ];
 

@@ -17,17 +17,19 @@ function getSymbolsMap(symbolsForExchange) {
 module.exports = {
   exchangeSymbols: async (exchange, type) => {
     const symbolsResponse = await client.getExchangeSymbols(exchange);
-    const mappedSymbols = _.map(symbolsResponse.data, (x) => {
+    var mappedSymbols = _.map(symbolsResponse.data, (x) => {
       return {
         symbol: x.Code.replace('-', '/'),
         exchange: x.Exchange,
       };
     });
+    mappedSymbols = mappedSymbols.filter(x => x.exchange !== null)
     const currentSymbols = await dbManager.symbols.getAllSymbols()
-    const filteredSymbols = currentSymbols.map(x => x.symbol)
-    const filteredMappedSymbols = mappedSymbols.filter(x => filteredSymbols.indexOf(x.symbol) < 0)
+    const filteredSymbols = currentSymbols.map(x => x.symbol + x.exchange + x.type + x.service)
+    const filteredMappedSymbols = mappedSymbols.filter(x => filteredSymbols.indexOf(x.symbol + x.exchange + type + serviceName) < 0)
     
-    await dbManager.symbols.insert(filteredMappedSymbols, type, serviceName);
+    if (filteredMappedSymbols.length > 0) await dbManager.symbols.insert(filteredMappedSymbols, type, serviceName);
+    
   },
 
   dailyOhlcvs: async (exchange, date) => {
