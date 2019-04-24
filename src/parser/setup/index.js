@@ -1,14 +1,12 @@
 const eodHandlers = require('../handlers/eod');
 
-const { exchanges, types } = require('../../config/constants')
+const { exchanges } = require('../../config/constants')
 // Populate database
 module.exports = {
  // pupulate symbol_codes table
- populateSymbol: async () => {
+ populateSymbol: () => {
   exchanges.map(async exchange => {
-    // check type of exchange 
-    const type = types[exchange]? types[exchange] : 'currency'
-    await eodHandlers.exchangeSymbols(exchange, type)
+    await eodHandlers.exchangeSymbols(exchange)
    })
   
  }

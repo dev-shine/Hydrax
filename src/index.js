@@ -5,8 +5,7 @@ const scheduler = require('./parser/scheduler');
 const setup = require('./parser/setup');
 // listen to requests
 app.listen(port, () => {
-  // initialize symbol_codes table on database
-  setup.populateSymbol()
+ 
   logger.info(`server started on port ${port} (${env})`)
 });
 

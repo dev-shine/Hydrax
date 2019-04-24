@@ -12,10 +12,9 @@ module.exports = (db) => {
     getAll: () => db.any(`select * from ${tableName}`),
     getAllSymbols: () => db.any(`select symbol, type, exchange, service from ${tableName}`),
     getForExchange: exchange => db.any(`select * from ${tableName} where exchange = $1`, [exchange]),
-    insert: (values, type, service) => {
+    insert: (values, service) => {
       const now = new Date();
       values.forEach((x) => {
-        x.type = type;
         x.exchange = x.exchange.toUpperCase();
         x.service = service;
         x.created_at = now;

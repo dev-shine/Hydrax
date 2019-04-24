@@ -4,6 +4,7 @@ const client = require('../clients/eod');
 const moment = require('moment');
 const _ = require('lodash');
 
+const { types } = require('../../config/constants')
 const serviceName = 'EOD';
 
 function getSymbolsMap(symbolsForExchange) {
@@ -16,21 +17,25 @@ function getSymbolsMap(symbolsForExchange) {
 
 module.exports = {
   // handler for symbols_codes population
-  exchangeSymbols: async (exchange, type) => {
+  exchangeSymbols: async (exchange) => {
+    // check type of exchange 
+    const type = types[exchange]? types[exchange] : 'currency'
+
     const symbolsResponse = await client.getExchangeSymbols(exchange);
-    var mappedSymbols = _.map(symbolsResponse.data, (x) => {
+    let mappedSymbols = _.map(symbolsResponse.data, (x) => {
       return {
+        type,
         symbol: x.Code.replace('-', '/'),
         exchange: x.Exchange,
       };
     });
     // check unique of table fields combination / reject record which is same with current in table
     mappedSymbols = mappedSymbols.filter(x => x.exchange !== null)
-    const currentSymbols = await dbManager.symbols.getAllSymbols()
-    const filteredSymbols = currentSymbols.map(x => x.symbol + x.exchange + x.type + x.service)
-    const filteredMappedSymbols = mappedSymbols.filter(x => filteredSymbols.indexOf(x.symbol + x.exchange + type + serviceName) < 0)
+    const currentSymbolsKeys = await dbManager.symbols.getAllSymbols()
+    const filteredSymbols = currentSymbolsKeys.map(x => x.symbol + x.exchange + x.type + x.service)
+    const filteredMappedSymbols = mappedSymbols.filter(x => filteredSymbols.indexOf(x.symbol + x.exchange + x.type + serviceName) < 0)
 
-    if (filteredMappedSymbols.length > 0) await dbManager.symbols.insert(filteredMappedSymbols, type, serviceName);
+    if (filteredMappedSymbols.length > 0) await dbManager.symbols.insert(filteredMappedSymbols, serviceName);
     
   },
   // handler for fetch / update bulk api eod daily

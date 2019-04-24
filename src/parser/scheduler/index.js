@@ -14,14 +14,14 @@ const scheduledJobs = [
     await eodHandlers.dailyOhlcvs('CC', prevDate);
   }),
   // live stocks data every i min
-  cron.schedule('50 * * * * *', async () => {
+  cron.schedule('10 * * * * *', async () => {
     
-    console.log('get live data every minute at 50 second');
+    console.log('get live data every minute at 10 second');
     await eodHandlers.liveStockPrices('CC');
   }),
   // update symbol_codes table daily
-  cron.schedule('0 12 * * *', async () => {
-    console.log('populate symbol_codes db at 12:00 every day');
+  cron.schedule('0 0 * * *', async () => {
+    console.log('populate symbol_codes db at 0:00 every day');
 
     setup.populateSymbol()
   }),
