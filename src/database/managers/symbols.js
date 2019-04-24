@@ -6,7 +6,7 @@ const pgp = require('pg-promise')({
 
 const tableName = 'symbol_codes';
 const cs = new pgp.helpers.ColumnSet(['symbol', 'type', 'exchange', 'service', 'created_at', 'updated_at'], { table: tableName });
-
+// CRUD for symbol_codes
 module.exports = (db) => {
   return {
     getAll: () => db.any(`select * from ${tableName}`),

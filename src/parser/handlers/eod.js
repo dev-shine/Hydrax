@@ -15,6 +15,7 @@ function getSymbolsMap(symbolsForExchange) {
 }
 
 module.exports = {
+  // handler for symbols_codes population
   exchangeSymbols: async (exchange, type) => {
     const symbolsResponse = await client.getExchangeSymbols(exchange);
     var mappedSymbols = _.map(symbolsResponse.data, (x) => {
@@ -23,15 +24,16 @@ module.exports = {
         exchange: x.Exchange,
       };
     });
+    // check unique of table fields combination / reject record which is same with current in table
     mappedSymbols = mappedSymbols.filter(x => x.exchange !== null)
     const currentSymbols = await dbManager.symbols.getAllSymbols()
     const filteredSymbols = currentSymbols.map(x => x.symbol + x.exchange + x.type + x.service)
     const filteredMappedSymbols = mappedSymbols.filter(x => filteredSymbols.indexOf(x.symbol + x.exchange + type + serviceName) < 0)
-    
+
     if (filteredMappedSymbols.length > 0) await dbManager.symbols.insert(filteredMappedSymbols, type, serviceName);
     
   },
-
+  // handler for fetch / update bulk api eod daily
   dailyOhlcvs: async (exchange, date) => {
     const symbolsForExchange = await dbManager.symbols.getForExchange(exchange);
     const symbolsMap = getSymbolsMap(symbolsForExchange);
@@ -61,7 +63,7 @@ module.exports = {
       logger.error('empty mapped response for dailyOhlcvs');
     }
   },
-
+  // handler for fetch / update live stocks api daily
   liveStockPrices: async (exchange) => {
     const symbolsForExchange = await dbManager.symbols.getForExchange(exchange);
     const symbolsMap = getSymbolsMap(symbolsForExchange);

@@ -16,16 +16,17 @@ function getParams() {
     fmt: 'json',
   };
 }
-
+// fetch data from external api
 module.exports = {
+  // get exchange symbols from external api
   getExchangeSymbols: exchange => client.get(`exchanges/${exchange}`, { params: getParams() }),
-
+  // get daily eod 
   getDailyOhlcvs: (exchange, date) => {
     const params = getParams();
     params.date = moment(date).format('YYYY-MM-DD');
     return client.get(`eod-bulk-last-day/${exchange}`, { params });
   },
-
+  // get live stocks prices from external api
   getLiveStockPrices: (exchange, symbols) => {
     const params = getParams();
     const fmt = x => `${x.symbol}.${exchange}`;

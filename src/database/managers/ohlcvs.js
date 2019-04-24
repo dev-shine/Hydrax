@@ -8,7 +8,7 @@ const tableName = 'ohlcvs';
 const cs = new pgp.helpers.ColumnSet([
   'symbol_code_index', 'period', 'timestamp', 'open', 'high', 'low', 'close', 'volume', 'created_at', 'updated_at',
 ], { table: tableName });
-
+// CRUD for ohlcvs
 module.exports = (db) => {
   return {
     getAll: () => db.any(`select * from ${tableName}`),
