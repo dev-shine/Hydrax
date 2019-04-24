@@ -42,10 +42,17 @@ module.exports = {
   dailyOhlcvs: async (exchange, date) => {
     const symbolsForExchange = await dbManager.symbols.getForExchange(exchange);
     const symbolsMap = getSymbolsMap(symbolsForExchange);
-    const response = await client.getDailyOhlcvs(exchange, date);
-    if (!response) {
-      return
-    }
+    let response
+      try {
+        response = await client.getDailyOhlcvs(exchange, date);
+      } catch (err) {
+        logger.error(`error on get livestocks`);
+      }
+      
+      if (!response) {
+        logger.warn(`no response from livestocks`);
+        return
+      }
     const mappedResponse = [];
     _.forEach(response.data, (x) => {
       const symbolIndex = symbolsMap[x.code.replace('-', '/')];
@@ -80,8 +87,15 @@ module.exports = {
     });
     const symbolChunks = _.chunk(symbolsForExchange, 10); // recommended value is < 15
     await Promise.all(symbolChunks.map(async (chunk) => {
-      const response = await client.getLiveStockPrices(exchange, chunk)
+      let response
+      try {
+        response = await client.getLiveStockPrices(exchange, chunk)
+      } catch (err) {
+        logger.error(`error on get livestocks`);
+      }
+      
       if (!response) {
+        logger.warn(`no response from livestocks`);
         return
       }
       const mappedResponse = [];
