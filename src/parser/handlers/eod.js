@@ -43,6 +43,9 @@ module.exports = {
     const symbolsForExchange = await dbManager.symbols.getForExchange(exchange);
     const symbolsMap = getSymbolsMap(symbolsForExchange);
     const response = await client.getDailyOhlcvs(exchange, date);
+    if (!response) {
+      return
+    }
     const mappedResponse = [];
     _.forEach(response.data, (x) => {
       const symbolIndex = symbolsMap[x.code.replace('-', '/')];
@@ -77,7 +80,10 @@ module.exports = {
     });
     const symbolChunks = _.chunk(symbolsForExchange, 10); // recommended value is < 15
     await Promise.all(symbolChunks.map(async (chunk) => {
-      const response = await client.getLiveStockPrices(exchange, chunk);
+      const response = await client.getLiveStockPrices(exchange, chunk)
+      if (!response) {
+        return
+      }
       const mappedResponse = [];
       const handleItem = (x) => {
         if (!Number.isInteger(x.timestamp) || x.timestamp === 0) {

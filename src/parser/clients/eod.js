@@ -24,7 +24,7 @@ module.exports = {
   getDailyOhlcvs: (exchange, date) => {
     const params = getParams();
     params.date = moment(date).format('YYYY-MM-DD');
-    return client.get(`eod-bulk-last-day/${exchange}`, { params });
+    return client.get(`eod-bulk-last-day/${exchange}`, { params }).then(response => response ).catch(err => {});
   },
   // get live stocks prices from external api
   getLiveStockPrices: (exchange, symbols) => {
@@ -34,6 +34,6 @@ module.exports = {
       params.s = _.map(_.slice(symbols, 1, symbols.length), fmt).join(',');
     }
 
-    return client.get(`real-time/${fmt(symbols[0])}`, { params });
+    return client.get(`real-time/${fmt(symbols[0])}`, { params }).then(response => response ).catch(err => {});
   },
 };

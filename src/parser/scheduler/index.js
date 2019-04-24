@@ -2,22 +2,27 @@ const cron = require('node-cron');
 
 const eodHandlers = require('../handlers/eod');
 const setup = require('../setup');
+const { exchanges } = require('../../config/constants')
 // schedule services
 const scheduledJobs = [
   // bulk api eod daily
-  cron.schedule('30 0 * * *', async () => {
+  cron.schedule('30 0 * * *', () => {
     console.log('get daily ohlcvs at 00:30 every day');
-
-    const prevDate = new Date();
-    prevDate.setDate(prevDate.getDate() - 1);
-    prevDate.setHours(0, 0, 0, 0);
-    await eodHandlers.dailyOhlcvs('CC', prevDate);
+    exchanges.map(async exchange => {
+      const prevDate = new Date();
+      prevDate.setDate(prevDate.getDate() - 1);
+      prevDate.setHours(0, 0, 0, 0);
+      await eodHandlers.dailyOhlcvs(exchange, prevDate);
+    })
+    
   }),
   // live stocks data every i min
-  cron.schedule('10 * * * * *', async () => {
+  cron.schedule('10 * * * * *', () => {
     
     console.log('get live data every minute at 10 second');
-    await eodHandlers.liveStockPrices('CC');
+    exchanges.map(async exchange => {
+      await eodHandlers.liveStockPrices(exchange);
+    })
   }),
   // update symbol_codes table daily
   cron.schedule('0 0 * * *', async () => {
