@@ -31,7 +31,7 @@ module.exports = {
     });
     // check unique of table fields combination / reject record which is same with current in table
     mappedSymbols = mappedSymbols.filter(x => x.exchange !== null)
-    const currentSymbolsKeys = await dbManager.symbols.getAllSymbols()
+    const currentSymbolsKeys = await dbManager.symbols.getForExchange(exchange)
     const filteredSymbols = currentSymbolsKeys.map(x => x.symbol + x.exchange + x.type + x.service)
     const filteredMappedSymbols = mappedSymbols.filter(x => filteredSymbols.indexOf(x.symbol + x.exchange + x.type + serviceName) < 0)
 
