@@ -10,7 +10,6 @@ const cs = new pgp.helpers.ColumnSet(['symbol', 'type', 'exchange', 'service', '
 module.exports = (db) => {
   return {
     getAll: () => db.any(`select * from ${tableName}`),
-    getAllSymbols: () => db.any(`select symbol, type, exchange, service from ${tableName}`),
     getForExchange: exchange => db.any(`select * from ${tableName} where exchange = $1`, [exchange]),
     insert: (values, service) => {
       const now = new Date();
