@@ -44,7 +44,7 @@
     "passport-http-bearer": "^1.0.1",
     "passport-jwt": "4.0.0",
     "pg-promise": "^8.6.4",
-    "pm2": "^3.4.1",
+    "pm2": "^5.2.0",
     "uuid": "^3.1.0",
     "winston": "^3.1.0"
   },
